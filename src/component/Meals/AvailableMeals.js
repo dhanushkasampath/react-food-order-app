@@ -1,6 +1,7 @@
 import classes from "./AvailableMeals.module.css";
 import Card from "../UI/Card";
 import MealItem from "./MealItem/MealItem";
+import {useEffect, useState} from "react";
 
 const DUMMY_MEALS = [
   {
@@ -30,8 +31,32 @@ const DUMMY_MEALS = [
 ];
 
 //we want need any props here as we dont receive any
-const AvailableMeals = () => {
-  const mealsList = DUMMY_MEALS.map((meal) => (
+const AvailableMeals = () => {//we need to fetch data when this component is loaded. for that we can use useEffect
+  // to trigger a side effect of fetching data from the web when some data changes or when the component is loaded
+  // for the first time
+  const[meals, setMeals] = useState([]);
+
+  useEffect(()=>{
+
+    const fetchMeals = async () => {
+      const response = await fetch('https://react-prep-b4fd7-default-rtdb.firebaseio.com/meals.json');
+      const responseData = await response.json();
+
+      const loadedMeals = [];//create empty array
+      for(const key in responseData){
+        loadedMeals.push({
+          id: key,
+          name: responseData[key].name,
+          description: responseData[key].description,
+          price: responseData[key].price
+        });
+      }
+      setMeals(loadedMeals);
+    };
+    fetchMeals();
+  }, []);
+  // const mealsList = DUMMY_MEALS.map((meal) => (
+  const mealsList = meals.map((meal) => (
     <MealItem
       key={meal.id}
       name={meal.name}
