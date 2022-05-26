@@ -36,11 +36,17 @@ const AvailableMeals = () => {//we need to fetch data when this component is loa
   // for the first time
   const[meals, setMeals] = useState([]);
   const[isLoading, setIsLoading] = useState(true);
+  const[httpError, setHttpError] = useState();
 
   useEffect(()=>{
 
     const fetchMeals = async () => {
       const response = await fetch('https://react-prep-b4fd7-default-rtdb.firebaseio.com/meals.json');
+
+      if(!response.ok){
+        throw new Error('Something went wrong');//if this error thrown, the lines there after will not execute.
+      }
+
       const responseData = await response.json();
 
       const loadedMeals = [];//create empty array
@@ -55,12 +61,23 @@ const AvailableMeals = () => {//we need to fetch data when this component is loa
       setMeals(loadedMeals);
       setIsLoading(false);
     };
-    fetchMeals();
+
+    fetchMeals().catch((error) => {
+      setIsLoading(false);
+      setHttpError(error.message);
+    });//we can use catch to handle errors
+
   }, []);
 
   if(isLoading){
     return(<section className={classes.MealsLoading}>
       <p>Loading..</p>
+    </section>)
+  }
+
+  if(httpError){
+    return(<section className={classes.MealsError}>
+      <p>{httpError}</p>
     </section>)
   }
 
