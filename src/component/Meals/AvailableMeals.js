@@ -35,6 +35,7 @@ const AvailableMeals = () => {//we need to fetch data when this component is loa
   // to trigger a side effect of fetching data from the web when some data changes or when the component is loaded
   // for the first time
   const[meals, setMeals] = useState([]);
+  const[isLoading, setIsLoading] = useState(true);
 
   useEffect(()=>{
 
@@ -52,9 +53,17 @@ const AvailableMeals = () => {//we need to fetch data when this component is loa
         });
       }
       setMeals(loadedMeals);
+      setIsLoading(false);
     };
     fetchMeals();
   }, []);
+
+  if(isLoading){
+    return(<section className={classes.MealsLoading}>
+      <p>Loading..</p>
+    </section>)
+  }
+
   // const mealsList = DUMMY_MEALS.map((meal) => (
   const mealsList = meals.map((meal) => (
     <MealItem
