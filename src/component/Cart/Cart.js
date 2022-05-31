@@ -20,6 +20,16 @@ const Cart = (props) => {
         cartCtx.addItem({...item, amount: 1});
     };
 
+    const submitOrderHandler = (userData) => {
+        fetch('https://react-prep-b4fd7-default-rtdb.firebaseio.com/order.json', {
+            method: 'POST',
+            body:JSON.stringify({
+                user: userData,
+                orderedItems: cartCtx.items
+            })
+        });
+    }
+
     //we want to map all cartItems to cartItem.jsx elements
     const cartItems = (
         <ul className={classes["cart-items"]}>
@@ -56,7 +66,7 @@ const Cart = (props) => {
                 <span>Total Amount</span>
                 <span>{totalAmount}</span>
             </div>
-            {isCheckout && <Checkout onCancel={props.onClose}/>}
+            {isCheckout && <Checkout onConfirm={submitOrderHandler} onCancel={props.onClose}/>}
             {!isCheckout && modelActions}
         </Modal>
     );

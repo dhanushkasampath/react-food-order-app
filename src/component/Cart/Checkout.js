@@ -31,6 +31,7 @@ const Checkout = (props) => {
         const enteredCityIsValid = !isEmpty(enteredCity);
         const enteredPostalCodeIsValid = isFiveChars(enteredPostalCode);
 
+        //setting new values after confirm btn clicked
         setFormInputsValidity({
             name: enteredNameIsValid,
             street: enteredStreetIsValid,
