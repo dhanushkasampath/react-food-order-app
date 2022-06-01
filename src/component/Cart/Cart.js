@@ -33,6 +33,7 @@ const Cart = (props) => {
         });
         setIsSubmitting(false);
         setDidSubmit(true);
+        cartCtx.clearCart();
     }
 
     //we want to map all cartItems to cartItem.jsx elements
